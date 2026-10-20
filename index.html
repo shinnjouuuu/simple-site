@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hello, World!</title>
+  <link rel="stylesheet" crossorigin href="/simple-site/assets/index-Dluw4OIO.css">
+</head>
+<body>
+  <main>
+    <!-- ファーストビュー。見出しだけなので landmark にはしない（section ではなく div） -->
+    <div class="p-hero">
+      <div class="l-inner">
+        <h1 class="p-hero__title" lang="en">Hello, World!</h1>
+      </div>
+    </div>
+
+    <section class="p-about" aria-labelledby="about-title">
+      <div class="l-inner p-about__inner">
+        <h2 class="c-section-title" id="about-title" lang="en">About</h2>
+        <ul class="p-about__list">
+          <li class="c-card">
+            <h3 class="c-card__title">仮の見出し1</h3>
+            <p>仮の文です。内容が決まったら、ここを差し替えます。</p>
+          </li>
+          <li class="c-card">
+            <h3 class="c-card__title">仮の見出し2</h3>
+            <p>仮の文です。内容が決まったら、ここを差し替えます。</p>
+          </li>
+          <li class="c-card">
+            <h3 class="c-card__title">仮の見出し3</h3>
+            <p>仮の文です。内容が決まったら、ここを差し替えます。</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="p-contact" aria-labelledby="contact-title">
+      <div class="l-inner p-contact__inner">
+        <h2 class="c-section-title" id="contact-title" lang="en">Contact</h2>
+        <!-- 宛先は仮。example.com は例示用に予約されたドメイン -->
+        <p class="p-contact__body">
+          <a class="p-contact__link" href="mailto:contact@example.com">contact@example.com</a>
+        </p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
