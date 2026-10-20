@@ -36,7 +36,7 @@
   /* 文字 */
   /* hallmark-ignore S-39 書体は system-ui（10/20 新庄さん決定） */
   --font-base: system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; /* 雛形の $font-base から Web フォントを外したもの */
-  --fz-hero: clamp(2.25rem, 1.3922rem + 3.6601vw, 4rem);  /* fluid(36, 64)：375px で 36px → 1140px で 64px。雛形の fluid(30, 56) から一回り大きくした */
+  --fz-hero: clamp(1.875rem, 1.0784rem + 3.3987vw, 3.5rem);  /* 元は雛形の fluid(30, 56)：375px で 30px → 1140px で 56px */
   --fz-title: clamp(1.5rem, 1.0098rem + 2.0915vw, 2.5rem);   /* 元は雛形の fluid(24, 40)：375px で 24px → 1140px で 40px */
   --fz-card-title: 1.25rem;      /* 20px。雛形 .l-header__logo と同じ */
 
