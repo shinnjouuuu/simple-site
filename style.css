@@ -1,0 +1,199 @@
+/* Hallmark · macrostructure: 依頼で固定（Hero・About・Contact） · tone: 練習用・中立 · anchor hue: blue（#0E9BD6 の3トーン）
+ * 値の出どころ: LP の雛形 ~/projects/_assets/_lp-kit/new-lp.sh の既定値。Sass は使わない（HTML と CSS の2ファイルだけの依頼）
+ * pre-emit critique: P3 H4 E4 S2 R5 V2（S・V が低いのは構成と文言が依頼で固定の練習用だから。直していない）
+ * slop test: 53 / 58（該当しないゲートは pass に数えた）— fails: 1・7・8（依頼の決定）、23（面が 1280×800 で画面の21.5%）、44（Hero の上下が同じ 3rem）
+ * checks-ja: 該当 38 件中 pass 31 · 例外 1（S-39）· 注意 1（S-68）· fail 5（S-07・S-08・S-14 = 装飾は依頼の範囲外、S-22・S-53 = 仮の文の語中改行）
+ */
+
+/* ==========================================================================
+   トークン
+   色は新庄さん 10/20 決定の5色だけ。雛形の黄 #FDB813 は使わない。
+   ブレークポイントは 768px（雛形の md）。@media の中では変数が使えないので、そこだけ直接書く。
+   ========================================================================== */
+:root {
+  /* 色 */
+  --color-white: #FFFFFF;        /* 地。--color-accent の面に載せる文字にも使う */
+  --color-ink: #1A2B3C;          /* 墨・本文 */
+  --color-accent: #0E9BD6;       /* 青・面。白の文字は約3.1:1なので、載せるのは大きな太い文字だけ */
+  --color-accent-text: #0B6E9C;  /* 青・文字。白地で約5.6:1 → 本文の大きさでも使える */
+  --color-accent-pale: #EAF7FC;  /* 青・pale の地 */
+
+  /* 幅（雛形 _variables.scss の $width-inner / $inner-pad / $inner-pad-sp） */
+  --inner-width: 1140px;
+  --inner-pad: 2rem;
+  --inner-pad-sp: 1rem;          /* 768px 未満 */
+
+  /* 余白 */
+  --space-section: 3rem;         /* セクションの上下。雛形の .p-hero・.p-trust と同じ */
+  --space-title: 2.5rem;         /* 見出しと中身の間。雛形 .c-section-title の margin-bottom */
+  --space-card-gap: 2rem;        /* カードの間。雛形 .p-hero__inner の gap */
+  --space-card-pad: 1.25rem;     /* 20px。カードの内側。雛形 .c-accordion の内側と同じ */
+  --space-card-inner: 0.5rem;    /* カードの見出しと文の間。雛形 .p-hero__title の margin-top */
+
+  /* 角丸 */
+  --radius-card: 12px;           /* 雛形 .c-accordion と同じ */
+
+  /* 文字 */
+  /* hallmark-ignore S-39 書体は system-ui（10/20 新庄さん決定） */
+  --font-base: system-ui, -apple-system, "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; /* 雛形の $font-base から Web フォントを外したもの */
+  --fz-hero: clamp(1.875rem, 1.0784rem + 3.3987vw, 3.5rem);  /* 元は雛形の fluid(30, 56)：375px で 30px → 1140px で 56px */
+  --fz-title: clamp(1.5rem, 1.0098rem + 2.0915vw, 2.5rem);   /* 元は雛形の fluid(24, 40)：375px で 24px → 1140px で 40px */
+  --fz-card-title: 1.25rem;      /* 20px。雛形 .l-header__logo と同じ */
+
+  /* 操作 */
+  --tap-min: 2.75rem;            /* 44px = 主要CTAのタップ領域の下限（checks-ja S-44） */
+  --focus-width: 2px;            /* WCAG 2.4.13 が目安にする太さ */
+  --focus-offset: 2px;           /* 輪を下線から離して、輪だと分かるようにする */
+}
+
+/* ==========================================================================
+   Foundation
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-base);
+  line-height: 1.7;
+  color: var(--color-ink);
+  background: var(--color-white);
+  /* 和文の4点セット（checks-ja S-40）。overflow-wrap を先に置く＝レイアウトを守るのが最優先 */
+  overflow-wrap: anywhere;
+  line-break: strict;
+  word-break: normal;
+}
+
+@supports (text-autospace: normal) {
+  body {
+    text-autospace: normal;
+  }
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+  line-height: 1.35;
+  line-break: normal; /* 見出しに strict を当てると不自然に詰まる（checks-ja S-43） */
+}
+
+ul {
+  padding: 0;
+  list-style: none;
+}
+
+/* ==========================================================================
+   Layout
+   ========================================================================== */
+/* 幅の上限と左右の余白はここだけで持つ。子に固定幅を置かない */
+.l-inner {
+  width: 100%;
+  max-width: var(--inner-width);
+  margin-inline: auto;
+  padding-inline: var(--inner-pad-sp);
+}
+
+@media (min-width: 768px) {
+  .l-inner {
+    padding-inline: var(--inner-pad);
+  }
+}
+
+/* ==========================================================================
+   Component
+   ========================================================================== */
+.c-section-title {
+  font-size: var(--fz-title);
+  color: var(--color-accent-text);
+  text-align: center;
+}
+
+/* 並べ方（列数・カードの間）は親の .p-about__list が持つ。ここは中身だけ */
+.c-card {
+  display: grid;
+  align-content: start;
+  gap: var(--space-card-inner);
+  padding: var(--space-card-pad);
+  border-radius: var(--radius-card);
+  background: var(--color-white);
+}
+
+.c-card__title {
+  font-size: var(--fz-card-title);
+  color: var(--color-accent-text);
+}
+
+/* ==========================================================================
+   Project
+   ========================================================================== */
+.p-hero {
+  padding-block: var(--space-section);
+  background: var(--color-accent);
+}
+
+.p-hero__title {
+  font-size: var(--fz-hero); /* 最小でも 30px の太字 = 大きな文字の扱い。白の文字 3.1:1 でも AA に届く */
+  color: var(--color-white);
+}
+
+.p-about {
+  padding-block: var(--space-section);
+  background: var(--color-accent-pale);
+}
+
+.p-about__inner,
+.p-contact__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-title);
+}
+
+/* 768px を境に 1列 → 3列。auto-fit は使わない（途中の幅で「2枚＋1枚」が出るため） */
+.p-about__list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-card-gap);
+}
+
+@media (min-width: 768px) {
+  .p-about__list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.p-contact {
+  padding-block: var(--space-section);
+}
+
+.p-contact__body {
+  text-align: center;
+}
+
+.p-contact__link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--tap-min);
+  color: var(--color-accent-text);
+  text-decoration: underline;
+}
+
+.p-contact__link:hover,
+.p-contact__link:active {
+  color: var(--color-ink);
+}
+
+.p-contact__link:focus-visible {
+  outline: var(--focus-width) solid var(--color-accent-text);
+  outline-offset: var(--focus-offset);
+}
